@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react"
 import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Slider } from "@/components/ui/slider"
 import { Progress } from "@/components/ui/progress"
 
 interface MusicPlayerProps {
@@ -95,8 +94,8 @@ export function MusicPlayer({
     }
   }
 
-  const handleVolumeChange = (value: number[]) => {
-    const newVolume = value[0]
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value)
     setVolume(newVolume)
     if (audioRef.current) {
       audioRef.current.volume = newVolume
@@ -111,8 +110,8 @@ export function MusicPlayer({
     }
   }
 
-  const handleSeek = (value: number[]) => {
-    const seekTime = value[0]
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const seekTime = parseFloat(e.target.value)
     setCurrentTime(seekTime)
     if (audioRef.current) {
       audioRef.current.currentTime = seekTime
@@ -143,18 +142,19 @@ export function MusicPlayer({
           </div>
         </div>
 
-        {/* Seek slider */}
+        {/* Seek bar (using input range instead of Slider) */}
         <div className="mb-4">
           {isLoading ? (
             <Progress value={0} className="h-1" />
           ) : (
-            <Slider
-              value={[currentTime]}
+            <input
+              type="range"
+              value={currentTime}
               min={0}
               max={duration || 100}
               step={0.1}
-              onValueChange={handleSeek}
-              className="cursor-pointer"
+              onChange={handleSeek}
+              className="w-full"
             />
           )}
         </div>
@@ -198,13 +198,14 @@ export function MusicPlayer({
               {isMuted || volume === 0 ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
             </Button>
 
-            <Slider
-              value={[isMuted ? 0 : volume]}
+            <input
+              type="range"
+              value={isMuted ? 0 : volume}
               min={0}
               max={1}
               step={0.01}
-              onValueChange={handleVolumeChange}
-              className="cursor-pointer"
+              onChange={handleVolumeChange}
+              className="w-full"
               disabled={isLoading}
             />
           </div>
@@ -213,4 +214,3 @@ export function MusicPlayer({
     </div>
   )
 }
-
