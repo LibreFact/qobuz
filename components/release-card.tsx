@@ -39,7 +39,8 @@ interface TrackListProps {
   albumName: string
 }
 
-export default function TrackList({ tracks, artistName, albumName }: TrackListProps) {
+// Change this export of TrackList to a named export
+export function TrackList({ tracks, artistName, albumName }: TrackListProps) {
   return (
     <div className="grid grid-cols-1 gap-1">
       {tracks.map((track) => (
@@ -64,11 +65,10 @@ export default function TrackList({ tracks, artistName, albumName }: TrackListPr
         </div>
       ))}
     </div>
-  )
+  );
 }
 
-
-
+// Keep the default export for ReleaseCard
 const ReleaseCard = ({ result, resolvedTheme, ref }: { result: QobuzAlbum | QobuzTrack, resolvedTheme: string, ref?: React.Ref<HTMLDivElement> }) => {
     const { ffmpegState } = useFFmpeg();
     const { setStatusBar } = useStatusBar();
